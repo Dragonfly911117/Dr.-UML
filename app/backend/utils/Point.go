@@ -1,4 +1,4 @@
-package Point
+package utils
 
 import "math"
 

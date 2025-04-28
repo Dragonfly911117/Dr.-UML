@@ -1,4 +1,4 @@
-package Components
+package components
 
 type Components struct {
 	pool componentsPool
