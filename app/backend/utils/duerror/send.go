@@ -1,4 +1,4 @@
-package error
+package duerror
 
 type SendError struct {
 	msg string

@@ -1,4 +1,4 @@
-package error
+package duerror
 
 type DUError interface {
 	Error() string

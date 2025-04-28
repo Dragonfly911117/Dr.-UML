@@ -1,4 +1,4 @@
-package error
+package duerror
 
 type MemoryFullError struct {
 	msg string
