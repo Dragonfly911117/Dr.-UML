@@ -1,7 +1,7 @@
 package components
 
 import (
-	"Dr.uml/backend/Component"
+	"Dr.uml/backend/component"
 )
 
 type Pool struct {
