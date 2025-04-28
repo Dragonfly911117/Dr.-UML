@@ -1,4 +1,4 @@
-package utils
+package error
 
 type InvalidArgumentError struct {
 	msg string

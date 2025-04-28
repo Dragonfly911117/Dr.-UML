@@ -1,4 +1,4 @@
-package utils
+package error
 
 type MemoryFullError struct {
 	msg string

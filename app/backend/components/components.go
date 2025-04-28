@@ -1,5 +1,5 @@
 package components
 
 type Components struct {
-	pool componentsPool
+	pool Pool
 }
