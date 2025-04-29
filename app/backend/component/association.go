@@ -4,6 +4,16 @@ import (
 	"Dr.uml/backend/utils/duerror"
 )
 
+type AssociationType int
+
+const (
+	Extension      = 1 << iota // 0x01
+	Implementation = 1 << iota // 0x02
+	Composition    = 1 << iota // 0x04
+	Dependency     = 1 << iota // 0x08
+	supportedType  = Extension | Implementation | Composition | Dependency
+)
+
 type Association struct {
 	parents [2]*Gadget
 }
@@ -12,7 +22,7 @@ func NewAssociation(parents [2]*Gadget) (*Association, duerror.DUError) {
 	if parents[0] == nil || parents[1] == nil {
 		return nil, duerror.NewInvalidArgumentError("parents are nil")
 	}
-	return &Association {
+	return &Association{
 		parents: [2]*Gadget{parents[0], parents[1]},
 	}, nil
 }
