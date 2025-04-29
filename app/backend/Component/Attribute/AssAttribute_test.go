@@ -20,7 +20,11 @@ func TestAssAttribute_GetRatio(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			attr := NewAssAttribute(tt.inputRatio)
+			attr, err := NewAssAttribute(tt.inputRatio)
+			if err != nil {
+				t.Errorf("NewAssAttribute() error = %v", err)
+				return
+			}
 			gotRatio, gotErr := attr.GetRatio()
 
 			if gotRatio != tt.wantRatio {
@@ -49,7 +53,11 @@ func TestAssAttribute_SetRatio(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			attr := NewAssAttribute(0.5) // Initialize with a default valid ratio
+			attr, err := NewAssAttribute(0.5) // Initialize with a default valid ratio
+			if err != nil {
+				t.Errorf("NewAssAttribute() error = %v", err)
+				return
+			}
 			gotErr := attr.SetRatio(tt.input)
 
 			if tt.wantErr {
@@ -72,16 +80,33 @@ func TestNewAssAttribute(t *testing.T) {
 		name       string
 		inputRatio float64
 		wantRatio  float64
+		wantErr    bool
+		errorText  string
 	}{
-		{"valid ratio", 0.5, 0.5},
-		{"zero ratio", 0.0, 0.0},
-		{"one ratio", 1.0, 1.0},
+		{"valid ratio", 0.5, 0.5, false, ""},
+		{"zero ratio", 0.0, 0.0, false, ""},
+		{"one ratio", 1.0, 1.0, false, ""},
+		{"negative ratio", -0.1, 0, true, "ratio should be between 0 and 1"},
+		{"greater than one ratio", 1.1, 0, true, "ratio should be between 0 and 1"},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			attr := NewAssAttribute(tt.inputRatio)
-
+			attr, err := NewAssAttribute(tt.inputRatio)
+			if tt.wantErr {
+				if err == nil {
+					t.Errorf("NewAssAttribute() expected error but got nil")
+					return
+				}
+				if err.Error() != tt.errorText {
+					t.Errorf("NewAssAttribute() error = %v, want %v", err.Error(), tt.errorText)
+				}
+				return
+			}
+			if err != nil {
+				t.Errorf("NewAssAttribute() error = %v", err)
+				return
+			}
 			if attr.ratio != tt.wantRatio {
 				t.Errorf("NewAssAttribute() = %v, want %v", attr.ratio, tt.wantRatio)
 			}

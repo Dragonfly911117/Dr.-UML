@@ -11,10 +11,13 @@ type AssAttribute struct {
 }
 
 // NewAssAttribute creates a new AssAttribute instance with the specified ratio
-func NewAssAttribute(ratio float64) *AssAttribute {
+func NewAssAttribute(ratio float64) (*AssAttribute, duerror.DUError) {
+	if ratio < 0 || ratio > 1 {
+		return nil, duerror.NewInvalidArgumentError("ratio should be between 0 and 1")
+	}
 	return &AssAttribute{
 		ratio: ratio,
-	}
+	}, nil
 }
 
 // GetRatio retrieves the ratio value of the AssAttribute
