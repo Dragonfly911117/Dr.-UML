@@ -42,8 +42,8 @@ func (a *Association) MoveAttribute(index int, ratio float64) duerror.DUError {
 	return a.attributes[index].SetRatio(ratio)
 }
 
-func (a *Association) GetAssType() (AssociationType, duerror.DUError) {
-	return a.assType, nil
+func (a *Association) GetAssType() AssociationType {
+	return a.assType
 }
 
 func (a *Association) SetAssType(assType AssociationType) {
@@ -83,12 +83,12 @@ func (a *Association) RemoveAttribute(index int) duerror.DUError {
 	return nil
 }
 
-func (a *Association) GetParentStart() (*Gadget, duerror.DUError) {
-	return a.parents[0], nil
+func (a *Association) GetParentStart() *Gadget {
+	return a.parents[0]
 }
 
-func (a *Association) GetParentEnd() (*Gadget, duerror.DUError) {
-	return a.parents[1], nil
+func (a *Association) GetParentEnd() *Gadget {
+	return a.parents[1]
 }
 
 func (a *Association) SetParentStart(gadget *Gadget) duerror.DUError {
