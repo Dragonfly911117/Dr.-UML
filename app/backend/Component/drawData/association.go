@@ -1,13 +1,11 @@
 package drawdata
 
-import (
-	"Dr.uml/backend/utils"
-)
-
 type Association struct {
 	AssType    string         `json:"assType"`
 	Layer      int            `json:"layer"`
-	Start      utils.Point    `json:"start"`
-	End        utils.Point    `json:"end"`
+	StartX     int            `json:"startX"`
+	StartY     int            `json:"startY"`
+	EndX       int            `json:"endX"`
+	EndY       int            `json:"endY"`
 	Attributes []AssAttribute `json:"attributes"`
 }
