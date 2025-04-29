@@ -25,7 +25,7 @@ func (att *AssAttribute) GetRatio() (float64, duerror.DUError) {
 	return att.ratio, nil
 }
 
-// SetRatio updates the ratio value of the AssAttribute
+// SetRatio returns an error if the ratio is not between 0 and 1
 func (att *AssAttribute) SetRatio(ratio float64) duerror.DUError {
 	if ratio < 0 || ratio > 1 {
 		return duerror.NewInvalidArgumentError("ratio should be between 0 and 1")
