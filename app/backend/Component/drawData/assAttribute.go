@@ -1,9 +1,9 @@
 package drawdata
 
 type AssAttribute struct {
-	Attribute Attribute `json:"attribute"`
-	Content   string    `json:"content"`
-	Size      int       `json:"size"`
-	Style     int       `json:"style"`
-	Ratio     float64   `json:"ratio"`
+	Content   string  `json:"content"`
+	FontSize  int     `json:"fontSize"`
+	FontStyle int     `json:"fontStyle"`
+	FontFile  string  `json:"fontFile"`
+	Ratio     float64 `json:"ratio"`
 }
