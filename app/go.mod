@@ -7,6 +7,7 @@ toolchain go1.23.8
 require (
 	github.com/golang/mock v1.6.0
 	github.com/stretchr/testify v1.10.0
+	github.com/titanous/json5 v1.0.0
 	github.com/wailsapp/wails/v2 v2.10.1
 	golang.org/x/image v0.26.0
 )

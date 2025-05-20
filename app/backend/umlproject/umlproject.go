@@ -2,7 +2,9 @@ package umlproject
 
 import (
 	"context"
+	"fmt"
 	"maps"
+	"os"
 	"slices"
 	"time"
 
@@ -11,6 +13,8 @@ import (
 	"Dr.uml/backend/umldiagram"
 	"Dr.uml/backend/utils"
 	"Dr.uml/backend/utils/duerror"
+
+	"github.com/titanous/json5"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
@@ -88,11 +92,10 @@ func (p *UMLProject) SelectDiagram(diagramName string) duerror.DUError {
 		return duerror.NewInvalidArgumentError("Diagram not found")
 	}
 	if _, ok := p.activeDiagrams[diagramName]; !ok {
-		diagram, err := umldiagram.LoadExistUMLDiagram(diagramName)
+		err := p.OpenDiagram(diagramName)
 		if err != nil {
 			return err
 		}
-		p.activeDiagrams[diagramName] = diagram
 	}
 	p.currentDiagram = p.activeDiagrams[diagramName]
 	return nil
@@ -188,5 +191,47 @@ func (p *UMLProject) InvalidateCanvas() duerror.DUError {
 	// p.notifyDrawUpdate(p.currentDiagram.GetName())
 	// log.Println("InvalidateCanvas")
 	runtime.EventsEmit(p.ctx, "backend-event", p.GetDrawData())
+	return nil
+}
+
+func (p *UMLProject) OpenDiagram(filename string) duerror.DUError {
+	err := utils.ValidateFilePath(filename)
+	if err != nil {
+		return err
+	}
+
+	if p.availableDiagrams[filename] {
+		return p.SelectDiagram(filename)
+	}
+
+	file, err := os.OpenFile(filename, os.O_RDONLY, 0644)
+	if err != nil {
+		return duerror.NewFileIOError(fmt.Sprintf("Failed to open file %s.\n Error: %s", filename, err.Error()))
+	}
+	defer file.Close()
+
+	decoder := json5.NewDecoder(file)
+	var savedFileData utils.SavedFile
+	{
+	}
+	if err := decoder.Decode(&savedFileData); err != nil {
+		return duerror.NewInvalidArgumentError(fmt.Sprintf("Failed to decode file %s.\n Error: %s", filename, err.Error()))
+	}
+	switch savedFileData.Filetype {
+	case utils.FiletypeDiagram:
+		dia, err := umldiagram.LoadExistUMLDiagram(savedFileData)
+		if err != nil {
+			return err
+		}
+		p.availableDiagrams
+		break
+	case utils.FiletypeSubmodule:
+
+		// TODO
+		break
+	default:
+		return duerror.NewInvalidArgumentError(fmt.Sprintf("Unknown filetype %d", savedFileData.Filetype))
+	}
+
 	return nil
 }

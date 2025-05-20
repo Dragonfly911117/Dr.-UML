@@ -77,7 +77,7 @@ func CreateEmptyUMLDiagram(name string, dt DiagramType) (*UMLDiagram, duerror.DU
 	}, nil
 }
 
-func LoadExistUMLDiagram(name string) (*UMLDiagram, duerror.DUError) {
+func LoadExistUMLDiagram(name utils.SavedFile) (*UMLDiagram, duerror.DUError) {
 	// TODO
 	return CreateEmptyUMLDiagram(name, ClassDiagram)
 }

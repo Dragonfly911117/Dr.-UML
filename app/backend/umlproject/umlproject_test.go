@@ -257,3 +257,10 @@ func TestGetDrawData(t *testing.T) {
 	data = p.GetDrawData()
 	assert.Empty(t, data)
 }
+
+func TestOpenDiagram(t *testing.T) {
+	proj, err := CreateEmptyUMLProject("fuck")
+	assert.NoError(t, err)
+	err = proj.OpenDiagram("/home/df/GolfsjklandProjects/Quiddity/app/backend/example.json5")
+	assert.NoError(t, err)
+}
