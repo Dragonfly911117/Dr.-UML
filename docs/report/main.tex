@@ -101,6 +101,7 @@
     \begin{itemize}
         \item Update Figure
         \begin{itemize}
+            \item Remove up-down arrows from the Domain model diagram.
             \item Sequence diagram
             \begin{itemize}
                 \item Remove UI from all sequence diagrams.
@@ -111,6 +112,7 @@
         \begin{itemize}
             \item Add missing \("\)Technology and Data Variations List\("\) and \("\)Special Requirements\("\) sections for each use case.
         \end{itemize}
+        \item Add missing classes to identified classes
     \end{itemize}
 
 %% START HW1
@@ -456,10 +458,10 @@
             \item The error message of a failed connection should be easy to read.
         \end{itemize}
         \item \textbf{Technology and Data Variations List}:
-            \begin{itemize}
-                \item 1-2.a System uses TCP sockets to establish and connect Sessions.
-                \item 1-4.a A well-defined protocol should be followed for communication among Users.
-            \end{itemize}
+        \begin{itemize}
+            \item 1-2.a System uses TCP sockets to establish and connect Sessions.
+            \item 1-4.a A well-defined protocol should be followed for communication among Users.
+        \end{itemize}
         \item \textbf{Frequency of Occurrence}: Sometimes
         \item \textbf{Open Issues}: Undo/redo conflicts
     \end{itemize}
@@ -630,7 +632,7 @@
 
     \subsubsection{Classes Identified}
     The nouns listed below are found in the use case.
-    \begin{table}[h]
+   \begin{table}[h]
         \begin{threeparttable}
             \centering
             \caption{Classes Identified}
@@ -646,7 +648,9 @@
                 \hline
                 Project      & Connection         & *Chatroom   & *Message   & ChatHistory \\
                 \hline
-                TextStyle    &                    &             &            &             \\
+                TextStyle    & *Timer             & *Verifier   & fontSize   & isBold      \\
+                \hline
+                isItalic     & isUnderline        & position    & Toolbox    & Canvas      \\
                 \hline
             \end{tabular}
             \begin{tablenotes}
@@ -672,9 +676,9 @@
             \midrule
             fontSize & System & UMLFile & Toolbox \\
             isBold & Host & Filesystem & Canvas \\
-            isItalic & Client & VerificationResult & \\
+            isItalic & Client & VerificationResult & TextStyle\\
             isUnderline & Project & ChatHistory & \\
-            DiagramType & & Connection & TextStyle & \\
+            DiagramType & & Connection &  & \\
             position    & &            &           & \\
             \bottomrule
         \end{tabular}

@@ -1,6 +1,6 @@
 @startuml
 hide circle
-hide attribute
+'hide attribute
 
 
     object User {
@@ -87,32 +87,32 @@ hide attribute
         status
     }
 
-@endtuml
+'@endtuml
 
-    UMLProject "1" -- "*" UMLDiagram : 🡧manages
+    UMLProject "1" -- "*" UMLDiagram : manages
     note right on link
         A UMLroject can has multi UMLDiagrams.
         Just like .sln to .vcproj.
     end note
 
     UMLDiagram "1" -- "*" Gadget : consists of
-    Submodule "1" -- "*" Gadget : 🡧consists of
-    Submodule "1" -- "*" Association : 🡧consists of
-    Gadget "1" -- "*" Attribute : 🡧contains
-    Association  "1" -- "*" Attribute : 🡧contains
+    Submodule "1" -- "*" Gadget : consists of
+    Submodule "1" -- "*" Association : consists of
+    Gadget "1" -- "*" Attribute : contains
+    Association  "1" -- "*" Attribute : contains
     Gadget "1...2" -- "*" Association : Asscotiates
     note right on link
         A Gadget : Association = 1 : 1 occurs when an
         Association connects back to the same Gadget.
     end note
-    UMLProject  "1" -- "*" Submodule : 🡧knows
+    UMLProject  "1" -- "*" Submodule : knows
     note bottom on link
         This enables UMLProject import Submodules
          to UMLDiagrams under the project.
     end note
 
-    User "1" -- "1" Session : 🡧hosts
-    User  "*" -- "1" Session : 🡧joins
+    User "1" -- "1" Session : hosts
+    User  "*" -- "1" Session : joins
     Session "1" -- "1" UMLProject : connects to
     note right on link
         A Session binds a Projet
@@ -125,11 +125,11 @@ hide attribute
     note bottom on link
         For auto-save.
     end note
-    Session "1" -- "1" Timer : 🡧inquires
+    Session "1" -- "1" Timer : inquires
     note bottom on link
             For conneection timeout.
     end note
-    Message "1" -- "1" Timer : 🡧inquires
+    Message "1" -- "1" Timer : inquires
     note bottom on link
             For message-sending timeout.
     end note
