@@ -1,46 +1,46 @@
 @startuml
     class AssAttribute << (S,Aquamarine) >> {
-        - ratio float64
-        - assDD AssAttribute
-        - updateParentDraw <font color=blue>func</font>() DUError
+    - ratio float64
+        - assDD drawdata.AssAttribute
+        - updateParentDrawOuter <font color=blue>func</font>() duerror.DUError
 
+        - updateDrawData() duerror.DUError
+
+        + ToSavedAssAttribute() utils.SavedAtt
         + GetRatio() float64
-        + GetAssDD() AssAttribute
-        + SetContent(content string) DUError
-        + SetSize(size int) DUError
-        + SetStyle(style Textstyle) DUError
-        + SetFontFile(fontFile string) DUError
-        + SetRatio(ratio float64) DUError
-        + UpdateDrawData() 
-        + RegisterUpdateParentDraw(update <font color=blue>func</font>() DUError) DUError
+        + GetDrawData() drawdata.AssAttribute
+        + SetRatio(ratio float64) duerror.DUError
+        + RegisterUpdateParentDraw(update <font color=blue>func</font>() duerror.DUError) duerror.DUError
 
     }
     class Attribute << (S,Aquamarine) >> {
-        - content string
-        - size int
-        - style Textstyle
-        - fontFile string
-        - drawData Attribute
-        - updateParentDraw <font color=blue>func</font>() DUError
+         - content string
+         - size int
+         - style Textstyle
+         - fontFile string
+         - drawData drawdata.Attribute
+         - updateParentDraw <font color=blue>func</font>() duerror.DUError
 
-        - updateDrawData() DUError
+         - getFontFileBase() string
+         - updateDrawData() duerror.DUError
 
-        + GetContent() string
-        + SetContent(content string) DUError
-        + GetSize() int
-        + SetSize(size int) DUError
-        + GetStyle() Textstyle
-        + SetStyle(style Textstyle) DUError
-        + SetBold(value bool) DUError
-        + SetItalic(value bool) DUError
-        + SetUnderline(value bool) DUError
-        + SetFontFile(fontFile string) DUError
-        + IsBold() bool
-        + IsItalic() bool
-        + IsUnderline() bool
-        + Copy() (*Attribute, DUError)
-        + GetDrawData() Attribute
-        + RegisterUpdateParentDraw(update <font color=blue>func</font>() DUError) DUError
+         + GetContent() string
+         + SetContent(content string) duerror.DUError
+         + GetSize() int
+         + SetSize(size int) duerror.DUError
+         + GetStyle() Textstyle
+         + SetStyle(style Textstyle) duerror.DUError
+         + SetBold(value bool) duerror.DUError
+         + SetItalic(value bool) duerror.DUError
+         + SetUnderline(value bool) duerror.DUError
+         + SetFontFile(fontFile string) duerror.DUError
+         + GetFontFile() string
+         + IsBold() bool
+         + IsItalic() bool
+         + IsUnderline() bool
+         + Copy() (*Attribute, duerror.DUError)
+         + GetDrawData() drawdata.Attribute
+         + RegisterUpdateParentDraw(update <font color=blue>func</font>() duerror.DUError) duerror.DUError
 
     }
     class Textstyle << (T, #FF7700) >>  {
@@ -48,67 +48,130 @@
 
 
     class Association << (S,Aquamarine) >> {
-        - assType AssociationType
-        - layer int
-        - attributes []*AssAttribute
-        - parents []*Gadget
-        - drawdata Association
-        - updateParentDraw <font color=blue>func</font>() DUError
+         - assType AssociationType
+         - layer int
+         - attributes []*attribute.AssAttribute
+         - parents []*Gadget
+         - drawdata drawdata.Association
+         - isSelected bool
+         - updateParentDraw <font color=blue>func</font>() duerror.DUError
+         - startPointRatio []float64
+         - endPointRatio []float64
 
-        - updateDrawData() DUError
+         - validateIndex(index int) duerror.DUError
 
-        + GetAssType() AssociationType
-        + GetAttributes() ([]*AssAttribute, DUError)
-        + GetDrawData() any
-        + GetLayer() int
-        + GetParentEnd() *Gadget
-        + GetParentStart() *Gadget
-        + SetAssType(assType AssociationType) DUError
-        + SetLayer(layer int) DUError
-        + SetParentStart(gadget *Gadget) DUError
-        + SetParentEnd(gadget *Gadget) DUError
-        + AddAttribute(attribute *AssAttribute) DUError
-        + Cover(p Point) (bool, DUError)
-        + MoveAttribute(index int, ratio float64) DUError
-        + RemoveAttribute(index int) DUError
-        + RegisterUpdateParentDraw(update <font color=blue>func</font>() DUError) DUError
+         + ToSavedAssociation(parents []int) utils.SavedAss
+         + GetAssType() AssociationType
+         + GetAttributes() []*attribute.AssAttribute
+         + GetAttributesLen() int
+         + GetAttribute(index int) (*attribute.AssAttribute, duerror.DUError)
+         + GetDrawData() any
+         + GetLayer() int
+         + GetParentEnd() *Gadget
+         + GetParentStart() *Gadget
+         + GetStartRatio() []float64
+         + GetEndRatio() []float64
+         + GetIsSelected() bool
+         + SetIsSelected(value bool) duerror.DUError
+         + SetAssType(assType AssociationType) duerror.DUError
+         + SetLayer(layer int) duerror.DUError
+         + SetParentStart(gadget *Gadget, ratio []float64) duerror.DUError
+         + SetParentEnd(gadget *Gadget, ratio []float64) duerror.DUError
+         + SetAttrContent(index int, content string) duerror.DUError
+         + SetAttrSize(index int, size int) duerror.DUError
+         + SetAttrStyle(index int, style int) duerror.DUError
+         + SetAttrFontFile(index int, fontFile string) duerror.DUError
+         + SetAttrRatio(index int, ratio float64) duerror.DUError
+         + Cover(p utils.Point) (bool, duerror.DUError)
+         + AddAttribute(index int, ratio float64, content string) duerror.DUError
+         + AddLoadedAttribute(att *attribute.AssAttribute) duerror.DUError
+         + MoveAttribute(index int, ratio float64) duerror.DUError
+         + RemoveAttribute(index int) duerror.DUError
+         + UpdateDrawData() duerror.DUError
+         + RegisterUpdateParentDraw(update <font color=blue>func</font>() duerror.DUError) duerror.DUError
 
     }
     interface Component  {
-        + Cover(p Point) (bool, DUError)
-        + GetLayer() int
-        + SetLayer(layer int) DUError
-        + GetDrawData() any
-        + RegisterUpdateParentDraw(update <font color=blue>func</font>() DUError) DUError
-
-    }
-    class Gadget << (S,Aquamarine) >> {
         - gadgetType GadgetType
-        - point Point
+        - point utils.Point
         - layer int
-        - attributes [][]*Attribute
-        - color Color
-        - drawData Gadget
-        - updateParentDraw <font color=blue>func</font>() DUError
+        - attributes [][]*attribute.Attribute
+        - color string
+        - isSelected bool
+        - drawData drawdata.Gadget
+        - updateParentDraw <font color=blue>func</font>() duerror.DUError
 
-        - updateDrawData() DUError
+        - validateSection(section int) duerror.DUError
+        - validateIndex(index int, section int) duerror.DUError
+        - updateDrawData() duerror.DUError
 
-        + GetPoint() Point
+        + ToSavedGadget() utils.SavedGad
+        + GetPoint() utils.Point
         + GetLayer() int
-        + GetColor() Color
+        + GetColor() string
         + GetGadgetType() GadgetType
         + GetAttributesLen() []int
-        + SetPoint(point Point) DUError
-        + SetLayer(layer int) DUError
-        + SetColor(color Color) DUError
-        + Cover(p Point) (bool, DUError)
-        + AddAttribute(section int, content string) DUError
-        + RemoveAttribute(section int, index int) DUError
+        + GetIsSelected() bool
+        + GetAttributes() [][]*attribute.Attribute
+        + GetAttribute(section int, index int) (*attribute.Attribute, duerror.DUError)
+        + SetIsSelected(isSelected bool) duerror.DUError
+        + SetPoint(point utils.Point) duerror.DUError
+        + SetLayer(layer int) duerror.DUError
+        + SetColor(colorHexStr string) duerror.DUError
+        + SetAttrContent(section int, index int, content string) duerror.DUError
+        + SetAttrSize(section int, index int, size int) duerror.DUError
+        + SetAttrStyle(section int, index int, style int) duerror.DUError
+        + SetAttrFontFile(section int, index int, fontFile string) duerror.DUError
+        + Cover(p utils.Point) (bool, duerror.DUError)
+        + AddAttribute(section int, index int, content string) duerror.DUError
+        + AddBuiltAttribute(section int, att *attribute.Attribute) duerror.DUError
+        + RemoveAttribute(section int, index int) duerror.DUError
         + GetDrawData() any
-        + RegisterUpdateParentDraw(update <font color=blue>func</font>() DUError) DUError
+        + RegisterUpdateParentDraw(update <font color=blue>func</font>() duerror.DUError) duerror.DUError
 
     }
     enum AssociationType << (T, #FF7700) >>  {
+    }
+
+
+    class Gadget << (S,Aquamarine) >> {
+        - gadgetType GadgetType
+        - point utils.Point
+        - layer int
+        - attributes [][]*attribute.Attribute
+        - color string
+        - isSelected bool
+        - drawData drawdata.Gadget
+        - updateParentDraw <font color=blue>func</font>() duerror.DUError
+
+        - validateSection(section int) duerror.DUError
+        - validateIndex(index int, section int) duerror.DUError
+        - updateDrawData() duerror.DUError
+
+        + ToSavedGadget() utils.SavedGad
+        + GetPoint() utils.Point
+        + GetLayer() int
+        + GetColor() string
+        + GetGadgetType() GadgetType
+        + GetAttributesLen() []int
+        + GetIsSelected() bool
+        + GetAttributes() [][]*attribute.Attribute
+        + GetAttribute(section int, index int) (*attribute.Attribute, duerror.DUError)
+        + SetIsSelected(isSelected bool) duerror.DUError
+        + SetPoint(point utils.Point) duerror.DUError
+        + SetLayer(layer int) duerror.DUError
+        + SetColor(colorHexStr string) duerror.DUError
+        + SetAttrContent(section int, index int, content string) duerror.DUError
+        + SetAttrSize(section int, index int, size int) duerror.DUError
+        + SetAttrStyle(section int, index int, style int) duerror.DUError
+        + SetAttrFontFile(section int, index int, fontFile string) duerror.DUError
+        + Cover(p utils.Point) (bool, duerror.DUError)
+        + AddAttribute(section int, index int, content string) duerror.DUError
+        + AddBuiltAttribute(section int, att *attribute.Attribute) duerror.DUError
+        + RemoveAttribute(section int, index int) duerror.DUError
+        + GetDrawData() any
+        + RegisterUpdateParentDraw(update <font color=blue>func</font>() duerror.DUError) duerror.DUError
+
     }
     enum GadgetType << (T, #FF7700) >>  {
     }
@@ -116,123 +179,102 @@
 
 
     interface Container  {
-        + Insert(c Component) DUError
-        + Remove(c Component) DUError
-        + Search(p Point) (Component, DUError)
-        + GetAll() []Component
-        + Len() (int, DUError)
+        + Insert(c component.Component) duerror.DUError
+        + Remove(c component.Component) duerror.DUError
+        + Search(p utils.Point) (component.Component, duerror.DUError)
+        + SearchGadget(p utils.Point) (*component.Gadget, duerror.DUError)
+        + Contain(c component.Component) bool
+        + GetAll() []component.Component
+        + Len() int
 
     }
-    interface Graph  {
-        + FindStartEnd(st *Gadget, en *Gadget) ([]*Association, DUError)
-        + FindStart(st *Gadget) ([]*Association, DUError)
-        + FindEnd(en *Gadget) ([]*Association, DUError)
-        + FindEither(g *Gadget) ([]*Association, DUError)
-        + Update(a *Association, oldSt *Gadget, oldEn *Gadget) DUError
-        + Insert(a *Association) DUError
-        + Remove(a *Association) DUError
-        + RemoveGadget(g *Gadget) ([]*Association, DUError)
 
-    }
     class containerMap << (S,Aquamarine) >> {
-        - compMap <font color=blue>map</font>[Component]bool
+        - compMap <font color=blue>map</font>[component.Component]bool
 
-        + Insert(c Component) DUError
-        + Remove(c Component) DUError
-        + Search(p Point) (Component, DUError)
-        + GetAll() []Component
-        + Len() (int, DUError)
-
-    }
-    class graphMap << (S,Aquamarine) >> {
-        - assMap <font color=blue>map</font>[*Gadget]<font color=blue>map</font>[*Gadget][]*Association
-
-        + FindStartEnd(st *Gadget, en *Gadget) ([]*Association, DUError)
-        + FindStart(st *Gadget) ([]*Association, DUError)
-        + FindEnd(en *Gadget) ([]*Association, DUError)
-        + FindEither(g *Gadget) ([]*Association, DUError)
-        + Update(a *Association, oldSt *Gadget, oldEn *Gadget) DUError
-        + Insert(a *Association) DUError
-        + Remove(a *Association) DUError
-        + RemoveGadget(g *Gadget) ([]*Association, DUError)
+        + Insert(c component.Component) duerror.DUError
+        + Remove(c component.Component) duerror.DUError
+        + Search(p utils.Point) (component.Component, duerror.DUError)
+        + SearchGadget(p utils.Point) (*component.Gadget, duerror.DUError)
+        + Contain(c component.Component) bool
+        + GetAll() []component.Component
+        + Len() int
 
     }
 
 "Container" <|.. "containerMap"
-"Graph" <|.. "graphMap"
-
-    class AssAttribute << (S,Aquamarine) >> {
-        + Content string
-        + FontSize int
-        + FontStyle int
-        + FontFile string
-        + Ratio float64
-
-    }
-    class Association << (S,Aquamarine) >> {
-        + AssType int
-        + Layer int
-        + StartX int
-        + StartY int
-        + EndX int
-        + EndY int
-        + Attributes []AssAttribute
-
-    }
-    class Attribute << (S,Aquamarine) >> {
-        + Content string
-        + Height int
-        + Width int
-        + FontSize int
-        + FontStyle int
-        + FontFile string
-
-    }
-
-    class Gadget << (S,Aquamarine) >> {
-        + GadgetType int
-        + X int
-        + Y int
-        + Layer int
-        + Height int
-        + Width int
-        + Color int
-        + Attributes [][]Attribute
-
-    }
 
 
 
 
     class UMLDiagram << (S,Aquamarine) >> {
-        - name string
+       - name string
         - diagramType DiagramType
-        - lastModified Time
-        - startPoint Point
-        - backgroundColor Color
-        - componentsContainer Container
-        - componentsGraph Graph
-        - componentsSelected <font color=blue>map</font>[Component]bool
-        - notifyDrawUpdate <font color=blue>func</font>() DUError
-        - drawData Diagram
+        - startPoint utils.Point
+        - backgroundColor string
+        - cmdManager *command.Manager
+        - componentsContainer components.Container
+        - componentsSelected <font color=blue>map</font>[component.Component]bool
+        - associations <font color=blue>map</font>[*component.Gadget][][]*component.Association
+        - lastSave time.Time
+        - updateParentDraw <font color=blue>func</font>() duerror.DUError
+        - drawData drawdata.Diagram
 
-        - removeGadget(gad *Gadget) DUError
-        - validatePoint(point Point) DUError
-        - removeAssociation(a *Association) DUError
-        - updateDrawData() DUError
+        - getSelectedComponent() (component.Component, duerror.DUError)
+        - validatePoint(point utils.Point) duerror.DUError
+        - loadGadgetAttributes(gadget *component.Gadget, attributes []utils.SavedAtt) (duerror.DUError, int)
+        - loadGadgets(gadgets []utils.SavedGad) (<font color=blue>map</font>[int]*component.Gadget, duerror.DUError)
+        - loadAssAttributes(ass *component.Association, attributes []utils.SavedAtt) (duerror.DUError, int)
+        - loadAsses(asses []utils.SavedAss, dp <font color=blue>map</font>[int]*component.Gadget) duerror.DUError
+        - collectGadgets(res *utils.SavedDiagram) (<font color=blue>map</font>[*component.Gadget]int, duerror.DUError)
+        - collectAssociations(dp <font color=blue>map</font>[*component.Gadget]int, res *utils.SavedDiagram) duerror.DUError
+        - updateDrawData() duerror.DUError
+        - addComponent(c component.Component) duerror.DUError
+        - addGadget(g *component.Gadget) duerror.DUError
+        - addAssociation(a *component.Association) duerror.DUError
+        - removeComponent(c component.Component) duerror.DUError
+        - removeGadget(g *component.Gadget) duerror.DUError
+        - removeAssociation(a *component.Association) duerror.DUError
+        - getAllAssociationsInGadget(g *component.Gadget) <font color=blue>map</font>[*component.Association]bool
+        - removeComponents(comps <font color=blue>map</font>[component.Component]bool) duerror.DUError
+        - addComponents(comps <font color=blue>map</font>[component.Component]bool) duerror.DUError
+        - selectAll(comps <font color=blue>map</font>[component.Component]bool, newValue bool) duerror.DUError
+        - moveGadget(g *component.Gadget, point utils.Point) duerror.DUError
+        - setParentStartAssociation(a *component.Association, stNew *component.Gadget, stRatio []float64) duerror.DUError
+        - setParentEndAssociation(a *component.Association, enNew *component.Gadget, enRatio []float64) duerror.DUError
+        - addAttributeGadget(g *component.Gadget, section int, index int, content string) duerror.DUError
+        - removeAttributeGadget(g *component.Gadget, section int, index int) duerror.DUError
+        - addAttributeAssociation(a *component.Association, index int, ratio float64, content string) duerror.DUError
+        - removeAttributeAssociation(a *component.Association, index int) duerror.DUError
 
         + GetName() string
         + GetDiagramType() DiagramType
-        + GetLastModified() Time
-        + AddGadget(gadgetType GadgetType, point Point) DUError
-        + StartAddAssociation(point Point) DUError
-        + EndAddAssociation(assType AssociationType, endPoint Point) DUError
-        + RemoveSelectedComponents() DUError
-        + SelectComponent(point Point) DUError
-        + UnselectComponent(point Point) DUError
-        + UnselectAllComponents() DUError
-        + GetDrawData() Diagram
-        + RegisterNotifyDrawUpdate(update <font color=blue>func</font>() DUError) DUError
+        + GetLastModified() time.Time
+        + SetPointComponent(point utils.Point) duerror.DUError
+        + SetLayerComponent(layer int) duerror.DUError
+        + SetColorComponent(colorHexStr string) duerror.DUError
+        + SetAttrContentComponent(section int, index int, content string) duerror.DUError
+        + SetAttrSizeComponent(section int, index int, size int) duerror.DUError
+        + SetAttrStyleComponent(section int, index int, style int) duerror.DUError
+        + SetAttrFontComponent(section int, index int, fontFile string) duerror.DUError
+        + SetAttrRatioComponent(section int, index int, ratio float64) duerror.DUError
+        + SetParentStartComponent(point utils.Point) duerror.DUError
+        + SetParentEndComponent(point utils.Point) duerror.DUError
+        + Undo() duerror.DUError
+        + Redo() duerror.DUError
+        + AddGadget(gadgetType component.GadgetType, point utils.Point, layer int, colorHexStr string, header string) duerror.DUError
+        + StartAddAssociation(point utils.Point) duerror.DUError
+        + EndAddAssociation(assType component.AssociationType, endPoint utils.Point) duerror.DUError
+        + RemoveSelectedComponents() duerror.DUError
+        + SelectComponent(point utils.Point) duerror.DUError
+        + AddAttributeToGadget(section int, content string) duerror.DUError
+        + RemoveAttributeFromGadget(section int, index int) duerror.DUError
+        + AddAttributeToAssociation(ratio float64, content string) duerror.DUError
+        + RemoveAttributeFromAssociation(index int) duerror.DUError
+        + SaveToFile(filename string) (*utils.SavedDiagram, duerror.DUError)
+        + HasUnsavedChanges() bool
+        + GetDrawData() drawdata.Diagram
+        + RegisterUpdateParentDraw(update <font color=blue>func</font>() duerror.DUError) duerror.DUError
 
     }
     enum DiagramType << (T, #FF7700) >>  {
@@ -240,70 +282,345 @@
 
 
     class UMLProject << (S,Aquamarine) >> {
-        - ctx Context
+       - ctx context.Context
         - name string
-        - lastModified Time
-        - currentDiagram *UMLDiagram
+        - lastModified time.Time
+        - lastSave time.Time
+        - currentDiagram *umldiagram.UMLDiagram
         - availableDiagrams <font color=blue>map</font>[string]bool
-        - activeDiagrams <font color=blue>map</font>[string]*UMLDiagram
+        - activeDiagrams <font color=blue>map</font>[string]*umldiagram.UMLDiagram
         - runFrontend bool
 
-        + Startup(ctx Context) 
         + GetName() string
-        + GetLastModified() Time
+        + GetLastModified() time.Time
         + GetCurrentDiagramName() string
         + GetAvailableDiagramsNames() []string
         + GetActiveDiagramsNames() []string
-        + SelectDiagram(diagramName string) DUError
-        + CreateEmptyUMLDiagram(diagramType DiagramType, diagramName string) DUError
-        + CloseDiagram(diagramName string) DUError
-        + DeleteDiagram(diagramName string) DUError
-        + AddGadget(gadgetType GadgetType, point Point) DUError
-        + StartAddAssociation(point Point) DUError
-        + EndAddAssociation(associationType AssociationType, point Point) DUError
-        + RemoveSelectedComponents() DUError
-        + GetDrawData() Diagram
-        + InvalidateCanvas() DUError
+        + SetPointComponent(point utils.Point) duerror.DUError
+        + SetLayerComponent(layer int) duerror.DUError
+        + SetColorComponent(colorHexStr string) duerror.DUError
+        + SetAttrContentComponent(section int, index int, content string) duerror.DUError
+        + SetAttrSizeComponent(section int, index int, size int) duerror.DUError
+        + SetAttrStyleComponent(section int, index int, style int) duerror.DUError
+        + SetAttrFontComponent(section int, index int, font string) duerror.DUError
+        + SetAttrRatioComponent(section int, index int, ratio float64) duerror.DUError
+        + SetParentStartComponent(point utils.Point) duerror.DUError
+        + SetParentEndComponent(point utils.Point) duerror.DUError
+        + Startup(ctx context.Context)
+        + SelectDiagram(diagramName string) duerror.DUError
+        + CreateEmptyUMLDiagram(diagramType umldiagram.DiagramType, diagramName string) duerror.DUError
+        + CloseDiagram(diagramName string) duerror.DUError
+        + DeleteDiagram(diagramName string) duerror.DUError
+        + UndoDiagramChange() duerror.DUError
+        + RedoDiagramChange() duerror.DUError
+        + AddGadget(gadgetType component.GadgetType, point utils.Point, layer int, colorHexStr string, header string) duerror.DUError
+        + StartAddAssociation(point utils.Point) duerror.DUError
+        + EndAddAssociation(associationType component.AssociationType, point utils.Point) duerror.DUError
+        + RemoveSelectedComponents() duerror.DUError
+        + AddAttributeToGadget(section int, content string) duerror.DUError
+        + RemoveAttributeFromGadget(section int, index int) duerror.DUError
+        + AddAttributeToAssociation(ratio float64, content string) duerror.DUError
+        + RemoveAttributeFromAssociation(index int) duerror.DUError
+        + SelectComponent(point utils.Point) duerror.DUError
+        + GetDrawData() drawdata.Diagram
+        + InvalidateCanvas() duerror.DUError
+        + OpenDiagram(filename string) duerror.DUError
+        + SaveDiagram(filename string) duerror.DUError
+        + LoadProject(filename string) duerror.DUError
+        + SaveProject(filename string) duerror.DUError
+        + CloseProject() duerror.DUError
+
+    }
+    class Point << (S,Aquamarine) >> {
+        + X int
+        + Y int
+
+        + String() string
+        + Magnitude() (float64, duerror.DUError)
+        + MagnitudeInt() (int, duerror.DUError)
 
     }
 
 
-    class Color << (S,Aquamarine) >> {
-        + R uint8
-
-        + ToHex() int
-
-    }
-
-
-UMLProject *- UMLDiagram
+UMLProject *-- UMLDiagram
+UMLProject -> Point
 
 UMLDiagram ..> DiagramType
-UMLDiagram ..> Color
-UMLDiagram *- Container
-UMLDiagram *- Graph
+UMLDiagram *-- Container
+UMLDiagram -> Point
 
 Container *- Component
+Container -> Point
 
 Component <|.. Gadget
 Component <|.. Association
+Component -> Point
 
 Attribute <|.. AssAttribute
-Attribute -> Textstyle
+Attribute --> Textstyle
 
 Gadget *- Attribute
-Gadget -> GadgetType
+Gadget -down->GadgetType
 
 Association *- AssAttribute
 Association -> AssociationType
 
-Graph -> Association
-Graph -> Gadget
+
+
+@enduml
+
+@enduml
+
+@startuml
+
+
+    class SavedAss << (S,Aquamarine) >> {
+        + AssType int
+        + Layer int
+        + Parents []int
+        + StartPointRatio []float64
+        + EndPointRatio []float64
+        + Attributes []SavedAtt
+
+    }
+    class SavedAtt << (S,Aquamarine) >> {
+        + Content string
+        + Size int
+        + Style int
+        + FontFile string
+        + Ratio float64
+
+    }
+    class SavedDiagram << (S,Aquamarine) >> {
+        + Filetype int
+        + LastEdit string
+        + Gadgets []SavedGad
+        + Associations []SavedAss
+
+    }
+    class SavedGad << (S,Aquamarine) >> {
+        + GadgetType int
+        + Point string
+        + Layer int
+        + Color string
+        + Attributes []SavedAtt
+
+    }
+    class SavedProject << (S,Aquamarine) >> {
+        + Diagrams []string
+
+    }
+
+    @enduml
+
+@startuml
 
 
 
+    class ConnectionError << (S,Aquamarine) >> {
+        - msg string
+
+        + Error() string
+
+    }
+    class CorruptedFile << (S,Aquamarine) >> {
+        - msg string
+
+        + Error() string
+
+    }
+    interface DUError  {
+        + Error() string
+QQQ
+    }
+    class FileIOError << (S,Aquamarine) >> {
+        - msg string
+
+        + Error() string
+
+    }
+    class InvalidArgumentError << (S,Aquamarine) >> {
+        - msg string
+
+        + Error() string
+
+    }
+    class MemoryFullError << (S,Aquamarine) >> {
+        - msg string
+
+        + Error() string
+
+    }
+    class ParsingError << (S,Aquamarine) >> {
+        - msg string
+
+        + Error() string
+
+    }
+    class SendError << (S,Aquamarine) >> {
+        - msg string
+
+        + Error() string
+
+    }
+
+
+"DUError" <|-- "ConnectionError"
+"DUError" <|-- "CorruptedFile"
+"DUError" <|-- "FileIOError"
+"DUError" <|-- "InvalidArgumentError"
+"DUError" <|-- "MemoryFullError"
+"DUError" <|-- "ParsingError"
+"DUError" <|-- "SendError"
+@enduml
+
+@startuml
+
+    interface Command  {
+        + Execute() duerror.DUError
+        + Unexecute() duerror.DUError
+        + GetBefore() time.Time
+        + GetAfter() time.Time
+
+    }
+
+    class Manager << (S,Aquamarine) >> {
+        - undoStack []Command
+        - redoStack []Command
+        - lastModified time.Time
+        - limit int
+
+        + GetLastModified() time.Time
+        + Execute(cmd Command) duerror.DUError
+        + Undo() duerror.DUError
+        + Redo() duerror.DUError
+
+    }
+
+    class addAttributeAssociationCommand << (S,Aquamarine) >> {
+        - association *component.Association
+        - content string
+        - ratio float64
+        - index int
+
+        + Execute() duerror.DUError
+        + Unexecute() duerror.DUError
+
+    }
+    class addAttributeGadgetCommand << (S,Aquamarine) >> {
+        - gadget *component.Gadget
+        - content string
+        - section int
+        - index int
+
+        + Execute() duerror.DUError
+        + Unexecute() duerror.DUError
+
+    }
+    class addComponentCommand << (S,Aquamarine) >> {
+        - component component.Component
+
+        + Execute() duerror.DUError
+        + Unexecute() duerror.DUError
+
+    }
+    interface baseCommand  {
+        - diagram *UMLDiagram
+        - before time.Time
+        - after time.Time
+
+        + GetBefore() time.Time
+        + GetAfter() time.Time
+
+        + Execute() duerror.DUError
+        + Unexecute() duerror.DUError
+
+    }
+    class moveGadgetCommand << (S,Aquamarine) >> {
+        - gadget *component.Gadget
+        - newPoint utils.Point
+        - oldPoint utils.Point
+
+        + Execute() duerror.DUError
+        + Unexecute() duerror.DUError
+
+    }
+    class removeAttributeAssociationCommand << (S,Aquamarine) >> {
+        - association *component.Association
+        - content string
+        - ratio float64
+        - index int
+
+        + Execute() duerror.DUError
+        + Unexecute() duerror.DUError
+
+    }
+    class removeAttributeGadgetCommand << (S,Aquamarine) >> {
+        - gadget *component.Gadget
+        - content string
+        - section int
+        - index int
+
+        + Execute() duerror.DUError
+        + Unexecute() duerror.DUError
+
+    }
+    class removeSelectedComponentCommand << (S,Aquamarine) >> {
+        - components <font color=blue>map</font>[component.Component]bool
+
+        + Execute() duerror.DUError
+        + Unexecute() duerror.DUError
+
+    }
+    class selectAllCommand << (S,Aquamarine) >> {
+        - components <font color=blue>map</font>[component.Component]bool
+        - newValue bool
+
+        + Execute() duerror.DUError
+        + Unexecute() duerror.DUError
+
+    }
+    class setParentEndCommand << (S,Aquamarine) >> {
+        - association *component.Association
+        - enNew *component.Gadget
+        - enOld *component.Gadget
+        - enRatioNew []float64
+        - enRatioOld []float64
+
+        + Execute() duerror.DUError
+        + Unexecute() duerror.DUError
+
+    }
+    class setParentStartCommand << (S,Aquamarine) >> {
+        - association *component.Association
+        - stNew *component.Gadget
+        - stOld *component.Gadget
+        - stRatioNew []float64
+        - stRatioOld []float64
+
+        + Execute() duerror.DUError
+        + Unexecute() duerror.DUError
+
+    }
+    class setterCommand << (S,Aquamarine) >> {
+        - component component.Component
+        - execute <font color=blue>func</font>() duerror.DUError
+        - unexecute <font color=blue>func</font>() duerror.DUError
+
+
+    }
 
 
 
-
+"baseCommand" <|.. "addAttributeAssociationCommand"
+"baseCommand" <|.. "addAttributeGadgetCommand"
+"baseCommand" <|.. "addComponentCommand"
+"baseCommand" <|.. "moveGadgetCommand"
+"baseCommand" <|.. "removeAttributeAssociationCommand"
+"baseCommand" <|.. "removeAttributeGadgetCommand"
+"baseCommand" <|.. "removeSelectedComponentCommand"
+"baseCommand" <|.. "selectAllCommand"
+"baseCommand" <|.. "setParentEndCommand"
+"baseCommand" <|.. "setParentStartCommand"
+"baseCommand" <|.. "setterCommand"
 @enduml
