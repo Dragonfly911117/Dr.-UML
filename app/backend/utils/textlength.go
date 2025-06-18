@@ -2,6 +2,7 @@ package utils
 
 import (
 	"Dr.uml/backend/drawdata"
+	"errors"
 	"github.com/labstack/gommon/log"
 	"image"
 	"image/color"
@@ -28,7 +29,7 @@ func loadFont(file string) (*opentype.Font, duerror.DUError) {
 
 // genGlyphImage is a helper function for the ease of development and should not
 // be used on production.
-func genGlyphImage(face font.Face, str string) { // notest
+func genGlyphImage(face font.Face, str string) (err duerror.DUError) { // notest
 	// Draw the string to an image
 	imgWidth := 400
 	imgHeight := 100
@@ -45,13 +46,18 @@ func genGlyphImage(face font.Face, str string) { // notest
 	if err != nil {
 		log.Fatalf("failed to create output file: %v", err)
 	}
-	defer outFile.Close()
+	defer func() {
+		err = errors.Join(outFile.Close())
+	}()
+
 	if err := png.Encode(outFile, img); err != nil {
 		log.Fatalf("failed to encode image: %v", err)
 	}
+
+	return err
 }
 
-func GetTextSize(str string, size int, fontFile string) (int, int, duerror.DUError) {
+func GetTextSize(str string, size int, fontFile string) (height int, width int, err duerror.DUError) {
 	defaultFontFile := os.Getenv("APP_ROOT") + drawdata.DefaultAttributeFontFile
 	if fontFile == "" {
 		fontFile = defaultFontFile
@@ -72,19 +78,21 @@ func GetTextSize(str string, size int, fontFile string) (int, int, duerror.DUErr
 	if err != nil { //notest
 		return 0, 0, duerror.NewFileIOError(err.Error())
 	}
-	defer face.Close()
+	defer func() {
+		err = errors.Join(face.Close())
+	}()
 
 	//genGlyphImage(face, str)
 
-	var width fixed.Int26_6
+	var fixedWidth fixed.Int26_6
 	for _, r := range str {
 		advance, ok := face.GlyphAdvance(r)
 		if !ok { // notest
 			return 0, 0, duerror.NewFileIOError("glyph not found")
 		}
-		width += advance
+		fixedWidth += advance
 	}
 	metrics := face.Metrics()
-	height := metrics.Ascent + metrics.Descent
-	return height.Round(), width.Round(), nil
+	fixedHeight := metrics.Ascent + metrics.Descent
+	return fixedHeight.Round(), fixedWidth.Round(), nil
 }
